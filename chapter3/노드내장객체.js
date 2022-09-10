@@ -79,3 +79,41 @@ function checkThis() {
     console.log(`this in func === global? ${this === global}`);
 }
 checkThis();
+
+
+// process
+// 현재 실행중인 노드 프로세스에 대한 정보를 담고 있음
+
+
+// os
+// node 자체에서 제공하는 모듈
+// 이름 그대로 운영체제의 정보를 담고 있음.
+const os = require('os');
+
+os.arch()   // process.arch와 동일
+os.platform()   // proces.platform과 동일
+os.type()   // os의 종류
+os.uptime() // 운영체제 부팅 이후 흐른 시간(초), process.uptime()은 node의 실행 시간
+os.hostname()   // 컴퓨터의 이름
+os.release()    // 운영체제 버전
+os.homedir()    // 홈 디렉토리 경로
+os.tmpdir() // 임시 파일 저장 경로
+console.log(os.cpus()); // cpu에 대한 정보
+os.freemem()    // 사용 가능한 메모리(ram)
+os.totalmem()   // 전체 메모리 용량
+
+
+// path
+const path = require('path');
+
+// url
+// 인터넷 주소를 쉽게 조작할 수 있게 도와주는 모듈
+
+
+// crypto
+// 단방향 암호화, 복호화는 불가능
+
+
+// util
+// 각종 편의 기능을 모아둔 모듈
+// deprecated와 promisify가 자주 쓰임
