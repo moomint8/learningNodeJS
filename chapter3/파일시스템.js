@@ -34,5 +34,3 @@ fsPromise.writeFile('./writeme.txt', '글이 입력됩니다.')
     .catch((err) => {
         throw err;
     });
-
-fsPromise.
