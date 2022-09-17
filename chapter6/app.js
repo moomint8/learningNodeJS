@@ -1,22 +1,33 @@
 const express = require('express');
+const dotenv = require('dotenv');   // 최대한 위에 두는 것이 좋음, 밑에 모듈이 이를 사용하는 경우 먼저 선언되어야 하기 때문에
 const path = require('path');
 const morgan = require('morgan');   // 요청과 응답을 기록하는 라우터
 const cookieParser = require('cookie-parser');   // 쿠키 처리해주는 라우터
 const session = require('express-session');
 
+dotenv.config();
+
 const app = express();
+
+// 라우터 가져오기
+const indexRouter = require('./routes');
+const userRouter = require('./routes/user');
 
 // SET PORT = 포트번호 : 해당 포트번호로 포트 사용, 없으면 3000
 // 위 명령어를 한 번 사용시 계속 해당 포트 점유하므로 유의
 app.set('port', process.env.PORT || 3000);
 
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+
 app.use(morgan('dev'));
 // app.use(morgan('combined'));    // dev보다 더 상세하게 알려줌
-app.use(cookieParser('testPassword'));  // 암호화 안할 거면 testPassword 없애면 됨
+// app.use(cookieParser('testPassword'));  // 암호화 안할 거면 testPassword 없애면 됨
+app.use(cookieParser(process.env.COOKIE_SECRET));   // 암호키는 /view/.env 에 저장됨
 app.use(session({
     resave: false,
     saveUninitialized: false,
-    secret: 'testPassword',
+    secret: process.env.COOKIE_SECRET,  // 원문 testPassword
     cookie: {
         httpOnly: true,
     },
@@ -24,6 +35,9 @@ app.use(session({
 }))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));    // true면 qs, false면 querystring, qs가 더 강력해서 true 추천
+
+app.use('/route', indexRouter);
+app.use('/user', userRouter);
 
 // localhost:3000/zerocho.html                   chapter6/public-3030/zerocho.html
 // app.use('요청경로', express.static(path.join('실제 경로')));
