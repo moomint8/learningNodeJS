@@ -11,7 +11,6 @@
   "license": "MIT",
   "dependencies": {
     "body-parse": "^0.1.0",
-    "cookie-parse": "^0.4.0",
     "express": "^4.18.1"
   },
   "devDependencies": {

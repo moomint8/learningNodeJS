@@ -4,7 +4,6 @@ const bcrypt = require('bcrypt');
 const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 const User = require('../models/user');
 
-
 const router = express.Router();
 
 router.post('/join', isNotLoggedIn, async (req, res, next) => {     // isNotLoggedIn 으로 로그인 안한 사람만 접근하도록
@@ -47,10 +46,22 @@ router.post('/login', isNotLoggedIn, (req, res, next) => {
     })(req, res, next); // 미들웨어 내의 미들웨어에는 (req, res, next)를 붙입니다.
 });
 
-router.get('/logout', isLoggedIn, (req, res) => {
-    req.logout();
-    req.session.destroy();
-    res.redirect('/');
+// passport 버전 변경으로 인해 문법 변화로 사용X
+// router.get('/logout', isLoggedIn, (req, res) => {
+//     req.logout();
+//     req.session.destroy();
+//     res.redirect('/');
+// });
+
+router.get("/logout", async (req, res, next) => {
+    req.logout((err) => {
+        req.session.destroy();
+        if (err) {
+            res.status(404).send("로그아웃 실패");
+        } else {
+            res.redirect("/");
+        }
+    });
 });
 
 router.get('/kakao', passport.authenticate('kakao'));
@@ -60,6 +71,5 @@ router.get('/kakao/callback', passport.authenticate('kakao', {
 }), (req, res) => {
     res.redirect('/');
 });
-
 
 module.exports = router;

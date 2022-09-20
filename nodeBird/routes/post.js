@@ -36,17 +36,18 @@ router.post('/img', isLoggedIn, upload.single('img'), (req, res) => {
 const upload2 = multer();
 router.post('/', isLoggedIn, upload2.none(), async (req, res, next) => {
     try {
+        console.log(req.user);
         const post = await Post.create({
             content: req.body.content,
             img: req.body.url,
             UserId: req.user.id,
         });
-        const hashtags = req.body.content.match(/#[^\s#]*/g);
+        const hashtags = req.body.content.match(/#[^\s#]*/g);   // #에서 (공백)# 이 아닌 애들 까지
         if (hashtags) {
             const result = await Promise.all(
                 hashtags.map(tag => {
                     return Hashtag.findOrCreate({
-                        where: { title: tag.slice(1).toLowerCase() },
+                        where: { title: tag.slice(1).toLowerCase() },   // # 제거
                     })
                 }),
             );
