@@ -1,3 +1,3 @@
 .env
 nodeBird/.env
-config/config.json
+awsNodeBird/.env
